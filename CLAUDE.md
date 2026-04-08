@@ -7,6 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 控制台输出使用中文
 - 代码中的变量名、函数名等标识符使用英文
 - 输出的日志使用英文
+- frontend/ 目录下，全部使用英文
+- 代码中的返回值，对外输出的，必须英文
+- 所有给前端可以看到的，必须使用英文
 
 ## 常用命令
 

@@ -1,0 +1,335 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1775645314663,
+  "projectRoot": "/Users/milesliu/go/src/chain-access",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Go",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "go.mod"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "go",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "api": {
+      "path": "api",
+      "purpose": "API routes",
+      "fileCount": 0,
+      "lastAccessed": 1775645314641,
+      "keyFiles": []
+    },
+    "frontend": {
+      "path": "frontend",
+      "purpose": null,
+      "fileCount": 6,
+      "lastAccessed": 1775645314648,
+      "keyFiles": [
+        "README.md",
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "vite.config.js"
+      ]
+    },
+    "state": {
+      "path": "state",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1775645314649,
+      "keyFiles": [
+        "cancel-signal-state.json"
+      ]
+    },
+    "api/config": {
+      "path": "api/config",
+      "purpose": "Configuration files",
+      "fileCount": 1,
+      "lastAccessed": 1775645314651,
+      "keyFiles": [
+        "config.go"
+      ]
+    },
+    "api/middleware": {
+      "path": "api/middleware",
+      "purpose": "Middleware",
+      "fileCount": 1,
+      "lastAccessed": 1775645314651,
+      "keyFiles": [
+        "jwt.go"
+      ]
+    },
+    "frontend/dist": {
+      "path": "frontend/dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 3,
+      "lastAccessed": 1775645314652,
+      "keyFiles": [
+        "favicon.svg",
+        "icons.svg",
+        "index.html"
+      ]
+    },
+    "frontend/node_modules": {
+      "path": "frontend/node_modules",
+      "purpose": "Dependencies",
+      "fileCount": 1,
+      "lastAccessed": 1775645314652,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "api/service/auth_service.go",
+      "accessCount": 16,
+      "lastAccessed": 1775649968945,
+      "type": "file"
+    },
+    {
+      "path": "api/service_auth.go",
+      "accessCount": 10,
+      "lastAccessed": 1775521842811,
+      "type": "file"
+    },
+    {
+      "path": "api/service_ethereum.go",
+      "accessCount": 10,
+      "lastAccessed": 1775521842999,
+      "type": "file"
+    },
+    {
+      "path": "api/config.go",
+      "accessCount": 9,
+      "lastAccessed": 1775521842921,
+      "type": "file"
+    },
+    {
+      "path": "api/controller/access_controller.go",
+      "accessCount": 9,
+      "lastAccessed": 1775649901170,
+      "type": "file"
+    },
+    {
+      "path": "api/service/ethereum_service.go",
+      "accessCount": 9,
+      "lastAccessed": 1775650407412,
+      "type": "file"
+    },
+    {
+      "path": "api/handler_access.go",
+      "accessCount": 8,
+      "lastAccessed": 1775521842830,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 8,
+      "lastAccessed": 1775524752240,
+      "type": "file"
+    },
+    {
+      "path": "api/middleware_jwt.go",
+      "accessCount": 7,
+      "lastAccessed": 1775521842872,
+      "type": "file"
+    },
+    {
+      "path": "main.go",
+      "accessCount": 7,
+      "lastAccessed": 1775524703248,
+      "type": "file"
+    },
+    {
+      "path": "api/middleware/jwt.go",
+      "accessCount": 7,
+      "lastAccessed": 1775649842219,
+      "type": "file"
+    },
+    {
+      "path": "CLAUDE.md",
+      "accessCount": 6,
+      "lastAccessed": 1775524783519,
+      "type": "file"
+    },
+    {
+      "path": "api/config/config.go",
+      "accessCount": 6,
+      "lastAccessed": 1775650391784,
+      "type": "file"
+    },
+    {
+      "path": "api/handler_auth.go",
+      "accessCount": 5,
+      "lastAccessed": 1775521842751,
+      "type": "file"
+    },
+    {
+      "path": "frontend/app.js",
+      "accessCount": 5,
+      "lastAccessed": 1775521843055,
+      "type": "file"
+    },
+    {
+      "path": "Dockerfile",
+      "accessCount": 5,
+      "lastAccessed": 1775524703262,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 5,
+      "lastAccessed": 1775649757277,
+      "type": "directory"
+    },
+    {
+      "path": "api/controller/auth_controller.go",
+      "accessCount": 5,
+      "lastAccessed": 1775649906406,
+      "type": "file"
+    },
+    {
+      "path": ".env.example",
+      "accessCount": 5,
+      "lastAccessed": 1775650439824,
+      "type": "file"
+    },
+    {
+      "path": "frontend/index.html",
+      "accessCount": 4,
+      "lastAccessed": 1775521842887,
+      "type": "file"
+    },
+    {
+      "path": "api/router/router.go",
+      "accessCount": 4,
+      "lastAccessed": 1775649760321,
+      "type": "file"
+    },
+    {
+      "path": "go.mod",
+      "accessCount": 3,
+      "lastAccessed": 1775524703368,
+      "type": "file"
+    },
+    {
+      "path": "frontend/vite.config.js",
+      "accessCount": 3,
+      "lastAccessed": 1775524714371,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/main.js",
+      "accessCount": 3,
+      "lastAccessed": 1775524718818,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/App.vue",
+      "accessCount": 3,
+      "lastAccessed": 1775524718869,
+      "type": "file"
+    },
+    {
+      "path": "api/repository/challenge_repo.go",
+      "accessCount": 2,
+      "lastAccessed": 1775524714341,
+      "type": "file"
+    },
+    {
+      "path": "api/model/access.go",
+      "accessCount": 2,
+      "lastAccessed": 1775524714353,
+      "type": "file"
+    },
+    {
+      "path": "api/model/auth.go",
+      "accessCount": 2,
+      "lastAccessed": 1775524714423,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/WalletConnect.vue",
+      "accessCount": 2,
+      "lastAccessed": 1775524726377,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/composables/useApi.js",
+      "accessCount": 2,
+      "lastAccessed": 1775524726398,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/AccessCheck.vue",
+      "accessCount": 2,
+      "lastAccessed": 1775524726410,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/ResultDisplay.vue",
+      "accessCount": 2,
+      "lastAccessed": 1775524726422,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/composables/useWallet.js",
+      "accessCount": 2,
+      "lastAccessed": 1775524726437,
+      "type": "file"
+    },
+    {
+      "path": "api",
+      "accessCount": 2,
+      "lastAccessed": 1775650366526,
+      "type": "directory"
+    },
+    {
+      "path": ".claude/settings.local.json",
+      "accessCount": 1,
+      "lastAccessed": 1775483420708,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/styles/main.css",
+      "accessCount": 1,
+      "lastAccessed": 1775523133770,
+      "type": "file"
+    },
+    {
+      "path": "frontend/package.json",
+      "accessCount": 1,
+      "lastAccessed": 1775524714292,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

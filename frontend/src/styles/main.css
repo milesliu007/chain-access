@@ -1,0 +1,97 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0a0a0a;
+  color: #e0e0e0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  max-width: 480px;
+  width: 100%;
+  padding: 2rem;
+}
+
+h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #fff; }
+.subtitle { color: #888; margin-bottom: 2rem; font-size: 0.9rem; }
+
+.card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #666;
+}
+.dot.connected { background: #4ade80; }
+
+.addr {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #888;
+  word-break: break-all;
+  margin-bottom: 0.75rem;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.75rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-family: monospace;
+}
+input:focus { outline: none; border-color: #6366f1; }
+
+button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+button:hover { opacity: 0.9; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary { background: #6366f1; color: #fff; }
+.btn-secondary { background: #333; color: #fff; margin-top: 0.5rem; }
+
+.result {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+.result.access { background: #052e16; color: #4ade80; border: 1px solid #166534; }
+.result.no-access { background: #2a0a0a; color: #f87171; border: 1px solid #7f1d1d; }
+.result.error { background: #1a1a0a; color: #fbbf24; border: 1px solid #78350f; }
