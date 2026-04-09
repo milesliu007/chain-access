@@ -146,6 +146,80 @@ h1 {
   border: 1px solid var(--border);
 }
 
+/* Chain selector */
+.chain-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.chain-selector.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.chain-option {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  letter-spacing: 0;
+}
+
+.chain-option:hover:not(:disabled) {
+  border-color: rgba(139, 92, 246, 0.4);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.chain-option.active {
+  border-color: var(--accent-purple);
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2);
+}
+
+.chain-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.chain-option.active .chain-dot {
+  box-shadow: 0 0 8px var(--accent-green), 0 0 4px var(--accent-green);
+}
+
+.chain-name {
+  flex: 1;
+}
+
+.chain-id-badge {
+  font-size: 0.7rem;
+  font-family: 'Exo 2', monospace;
+  color: var(--text-muted);
+  background: rgba(100, 116, 139, 0.15);
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+}
+
+.chain-option.active .chain-id-badge {
+  color: var(--accent-purple);
+  background: rgba(139, 92, 246, 0.15);
+}
+
 /* Form elements */
 label {
   display: block;

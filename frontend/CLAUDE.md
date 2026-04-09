@@ -3,7 +3,7 @@
 本文件为 Claude Code (claude.ai/code) 在此仓库中工作提供指引。
 
 完整的全栈架构、后端命令、环境变量和 API 端点请参考上级 [../CLAUDE.md](../CLAUDE.md)。
-
+回复的内容实用中文
 ## 语言规范
 
 `frontend/` 目录下的代码、注释和文档全部使用英文，包括提交信息、变量名、JSDoc 以及返回给前端的字符串。完整语言规范见上级 CLAUDE.md。

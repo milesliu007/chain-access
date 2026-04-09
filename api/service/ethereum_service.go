@@ -6,7 +6,10 @@ import (
 	"math/big"
 	"net/http"
 	"net/url"
+	"sync"
 	"time"
+
+	"chain-access/api/config"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
@@ -18,19 +21,47 @@ const rpcTimeout = 10 * time.Second
 
 // EthereumService 链上查询服务接口
 type EthereumService interface {
-	// CheckERC20Balance 查询 ERC-20 余额是否 > 0
-	CheckERC20Balance(walletAddress, contractAddress string) (bool, error)
-	// Close 关闭连接
+	// CheckERC20Balance 查询指定链上 ERC-20 余额是否 > 0
+	CheckERC20Balance(chainID, walletAddress, contractAddress string) (bool, error)
+	// GetChains 返回支持的链列表
+	GetChains() []config.ChainConfig
+	// Close 关闭所有连接
 	Close()
 }
 
-// ethereumServiceImpl 链上查询服务实现
-type ethereumServiceImpl struct {
+// chainClient 单条链的 ethclient
+type chainClient struct {
 	client *ethclient.Client
+	config config.ChainConfig
 }
 
-// NewEthereumService 创建链上查询服务
-func NewEthereumService(infuraURL, proxyAddr string) (EthereumService, error) {
+// ethereumServiceImpl 多链查询服务实现
+type ethereumServiceImpl struct {
+	mu      sync.RWMutex
+	clients map[string]*chainClient // key: chain ID
+	chains  []config.ChainConfig
+}
+
+// NewEthereumService 创建多链查询服务
+func NewEthereumService(chains []config.ChainConfig, proxyAddr string) (EthereumService, error) {
+	svc := &ethereumServiceImpl{
+		clients: make(map[string]*chainClient, len(chains)),
+		chains:  chains,
+	}
+
+	for _, chain := range chains {
+		client, err := dialChain(chain.RPCURL, proxyAddr)
+		if err != nil {
+			svc.Close()
+			return nil, fmt.Errorf("failed to connect to chain %s: %w", chain.ID, err)
+		}
+		svc.clients[chain.ID] = &chainClient{client: client, config: chain}
+	}
+
+	return svc, nil
+}
+
+func dialChain(rpcURL, proxyAddr string) (*ethclient.Client, error) {
 	var opts []rpc.ClientOption
 
 	if proxyAddr != "" {
@@ -46,17 +77,23 @@ func NewEthereumService(infuraURL, proxyAddr string) (EthereumService, error) {
 		opts = append(opts, rpc.WithHTTPClient(httpClient))
 	}
 
-	rpcClient, err := rpc.DialOptions(context.Background(), infuraURL, opts...)
+	rpcClient, err := rpc.DialOptions(context.Background(), rpcURL, opts...)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to Infura: %w", err)
+		return nil, err
 	}
 
-	client := ethclient.NewClient(rpcClient)
-	return &ethereumServiceImpl{client: client}, nil
+	return ethclient.NewClient(rpcClient), nil
 }
 
-// CheckERC20Balance 查询 ERC-20 余额是否 > 0
-func (s *ethereumServiceImpl) CheckERC20Balance(walletAddress, contractAddress string) (bool, error) {
+// CheckERC20Balance 查询指定链上 ERC-20 余额是否 > 0
+func (s *ethereumServiceImpl) CheckERC20Balance(chainID, walletAddress, contractAddress string) (bool, error) {
+	s.mu.RLock()
+	cc, ok := s.clients[chainID]
+	s.mu.RUnlock()
+	if !ok {
+		return false, fmt.Errorf("unsupported chain: %s", chainID)
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), rpcTimeout)
 	defer cancel()
 
@@ -73,7 +110,7 @@ func (s *ethereumServiceImpl) CheckERC20Balance(walletAddress, contractAddress s
 		Data: data,
 	}
 
-	result, err := s.client.CallContract(ctx, msg, nil)
+	result, err := cc.client.CallContract(ctx, msg, nil)
 	if err != nil {
 		return false, fmt.Errorf("on-chain query failed: %w", err)
 	}
@@ -82,7 +119,16 @@ func (s *ethereumServiceImpl) CheckERC20Balance(walletAddress, contractAddress s
 	return balance.Sign() > 0, nil
 }
 
-// Close 关闭连接
+// GetChains 返回支持的链列表
+func (s *ethereumServiceImpl) GetChains() []config.ChainConfig {
+	return s.chains
+}
+
+// Close 关闭所有连接
 func (s *ethereumServiceImpl) Close() {
-	s.client.Close()
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for _, cc := range s.clients {
+		cc.client.Close()
+	}
 }

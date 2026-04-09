@@ -22,7 +22,7 @@ func main() {
 	// 初始化业务逻辑层
 	authService := service.NewAuthService(cfg.JWTSecret, challengeRepo)
 
-	ethService, err := service.NewEthereumService(cfg.InfuraURL, cfg.HTTPProxy)
+	ethService, err := service.NewEthereumService(cfg.Chains, cfg.HTTPProxy)
 	if err != nil {
 		log.Fatalf("Ethereum 服务初始化失败: %v", err)
 	}

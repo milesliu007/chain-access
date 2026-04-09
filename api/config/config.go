@@ -8,7 +8,7 @@ import (
 
 // Config 应用配置
 type Config struct {
-	InfuraURL      string
+	Chains         []ChainConfig
 	JWTSecret      []byte
 	Port           string
 	AllowedOrigins []string
@@ -47,7 +47,7 @@ func LoadConfig() (*Config, error) {
 	}
 
 	return &Config{
-		InfuraURL:      "https://mainnet.infura.io/v3/" + infuraKey,
+		Chains:         DefaultChains(infuraKey),
 		JWTSecret:      []byte(jwtSecret),
 		Port:           port,
 		AllowedOrigins: origins,

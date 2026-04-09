@@ -29,9 +29,19 @@ export function useApi() {
     return data.token
   }
 
-  async function checkAccess(address, contractAddress, token) {
+  async function getChains() {
+    const res = await fetch(`${API_BASE}/chains`)
+    if (!res.ok) {
+      const err = await res.json()
+      throw new Error(err.error || 'Failed to fetch chains')
+    }
+    const data = await res.json()
+    return data.chains
+  }
+
+  async function checkAccess(address, contractAddress, token, chainId = 'ethereum') {
     const res = await fetch(
-      `${API_BASE}/check-access?address=${encodeURIComponent(address)}&contract_address=${encodeURIComponent(contractAddress)}`,
+      `${API_BASE}/check-access?address=${encodeURIComponent(address)}&contract_address=${encodeURIComponent(contractAddress)}&chain_id=${encodeURIComponent(chainId)}`,
       { headers: { Authorization: `Bearer ${token}` } }
     )
     if (!res.ok) {
@@ -42,5 +52,5 @@ export function useApi() {
     return data.has_access
   }
 
-  return { requestChallenge, verifySignature, checkAccess }
+  return { requestChallenge, verifySignature, checkAccess, getChains }
 }

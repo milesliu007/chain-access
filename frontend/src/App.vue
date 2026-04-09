@@ -15,7 +15,7 @@
     <WalletConnect />
     <AccessCheck />
     <footer class="app-footer">
-      Powered by Ethereum &middot; ERC-20 Token Gating
+      Powered by Multi-Chain EVM &middot; ERC-20 Token Gating
     </footer>
   </div>
 </template>

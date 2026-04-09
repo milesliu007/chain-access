@@ -27,6 +27,7 @@ func (ctrl *AccessController) HandleCheckAccess(c *gin.Context) {
 	jwtAddress := c.GetString("address")
 	queryAddress := c.Query("address")
 	contractAddress := c.Query("contract_address")
+	chainID := c.DefaultQuery("chain_id", "ethereum")
 
 	if contractAddress == "" {
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "missing required parameter: contract_address"})
@@ -52,7 +53,7 @@ func (ctrl *AccessController) HandleCheckAccess(c *gin.Context) {
 		return
 	}
 
-	hasAccess, err := ctrl.ethService.CheckERC20Balance(address, contractAddress)
+	hasAccess, err := ctrl.ethService.CheckERC20Balance(chainID, address, contractAddress)
 	if err != nil {
 		log.Printf("链上查询失败: %v", err)
 		c.JSON(http.StatusInternalServerError, model.ErrorResponse{Error: "on-chain query failed"})

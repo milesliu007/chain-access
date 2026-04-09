@@ -30,6 +30,7 @@ func SetupRouter(
 	// 控制器
 	authCtrl := controller.NewAuthController(authService)
 	accessCtrl := controller.NewAccessController(ethService)
+	chainCtrl := controller.NewChainController(ethService)
 
 	// 认证路由（无需 JWT）
 	authGroup := r.Group("/auth")
@@ -37,6 +38,9 @@ func SetupRouter(
 		authGroup.POST("/challenge", authCtrl.HandleChallenge)
 		authGroup.POST("/verify", authCtrl.HandleVerify)
 	}
+
+	// 公开 API（无需 JWT）
+	r.GET("/chains", chainCtrl.HandleGetChains)
 
 	// 权限查询路由（需要 JWT）
 	protectedGroup := r.Group("/")
