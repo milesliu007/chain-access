@@ -1,14 +1,15 @@
 <template>
   <div class="card" v-if="isConnected()">
-    <label for="contractInput">ERC-20 合约地址</label>
+    <div class="card-title">Access Check</div>
+    <label for="contractInput">ERC-20 Contract Address</label>
     <input
       id="contractInput"
       v-model="contractAddress"
       type="text"
       placeholder="0x..."
     />
-    <button class="btn-secondary" :disabled="!contractAddress" @click="handleCheck">
-      查询权限
+    <button class="btn-secondary" :disabled="!contractAddress || checking" @click="handleCheck">
+      {{ checking ? 'Checking...' : 'Check Access' }}
     </button>
     <ResultDisplay :result="result" />
   </div>
@@ -25,17 +26,21 @@ const { checkAccess } = useApi()
 
 const contractAddress = ref('0xdAC17F958D2ee523a2206206994597C13D831ec7')
 const result = ref(null)
+const checking = ref(false)
 
 async function handleCheck() {
   result.value = null
+  checking.value = true
   try {
     const hasAccess = await checkAccess(currentAddress.value, contractAddress.value, jwtToken.value)
     result.value = {
       type: hasAccess ? 'access' : 'no-access',
-      message: hasAccess ? '有权限 — 该钱包持有此 Token' : '无权限 — 该钱包未持有此 Token',
+      message: hasAccess ? 'Access Granted — Wallet holds this token' : 'Access Denied — Wallet does not hold this token',
     }
   } catch (err) {
     result.value = { type: 'error', message: err.message }
+  } finally {
+    checking.value = false
   }
 }
 </script>

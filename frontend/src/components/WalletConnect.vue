@@ -1,16 +1,18 @@
 <template>
   <div class="card">
+    <div class="card-title">Wallet</div>
     <div class="status">
       <span class="dot" :class="{ connected: isConnected() }"></span>
-      <span>{{ isConnected() ? '已连接' : '未连接钱包' }}</span>
+      <span>{{ isConnected() ? 'Connected' : 'Not Connected' }}</span>
     </div>
     <p v-if="currentAddress" class="addr">{{ currentAddress }}</p>
     <button
       class="btn-primary"
+      :class="{ connecting: isConnecting }"
       :disabled="isConnecting || isConnected()"
       @click="handleConnect"
     >
-      {{ isConnecting ? '连接中...' : isConnected() ? '已连接' : '连接钱包' }}
+      {{ isConnecting ? 'Connecting...' : isConnected() ? 'Connected' : 'Connect Wallet' }}
     </button>
     <p v-if="error" class="result error">{{ error }}</p>
   </div>

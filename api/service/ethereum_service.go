@@ -30,19 +30,23 @@ type ethereumServiceImpl struct {
 }
 
 // NewEthereumService 创建链上查询服务
-func NewEthereumService(infuraURL string) (EthereumService, error) {
-	proxyURL, err := url.Parse("http://127.0.0.1:7897")
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse proxy URL: %w", err)
+func NewEthereumService(infuraURL, proxyAddr string) (EthereumService, error) {
+	var opts []rpc.ClientOption
+
+	if proxyAddr != "" {
+		proxyURL, err := url.Parse(proxyAddr)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse proxy URL: %w", err)
+		}
+		httpClient := &http.Client{
+			Transport: &http.Transport{
+				Proxy: http.ProxyURL(proxyURL),
+			},
+		}
+		opts = append(opts, rpc.WithHTTPClient(httpClient))
 	}
 
-	httpClient := &http.Client{
-		Transport: &http.Transport{
-			Proxy: http.ProxyURL(proxyURL),
-		},
-	}
-
-	rpcClient, err := rpc.DialOptions(context.Background(), infuraURL, rpc.WithHTTPClient(httpClient))
+	rpcClient, err := rpc.DialOptions(context.Background(), infuraURL, opts...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to Infura: %w", err)
 	}

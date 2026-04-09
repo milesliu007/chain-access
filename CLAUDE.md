@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 语言规范
 - 所有文档（README、注释、文档文件等）使用中文
 - 控制台输出使用中文
+- ai 回复的内容实用中文
 - 代码中的变量名、函数名等标识符使用英文
 - 输出的日志使用英文
 - frontend/ 目录下，全部使用英文

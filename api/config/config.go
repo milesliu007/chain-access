@@ -12,6 +12,7 @@ type Config struct {
 	JWTSecret      []byte
 	Port           string
 	AllowedOrigins []string
+	HTTPProxy      string
 }
 
 // LoadConfig 从环境变量加载配置，缺少必要配置时拒绝启动
@@ -50,5 +51,6 @@ func LoadConfig() (*Config, error) {
 		JWTSecret:      []byte(jwtSecret),
 		Port:           port,
 		AllowedOrigins: origins,
+		HTTPProxy:      os.Getenv("HTTP_PROXY"),
 	}, nil
 }

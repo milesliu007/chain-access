@@ -110,8 +110,20 @@
   "hotPaths": [
     {
       "path": "api/service/auth_service.go",
-      "accessCount": 16,
-      "lastAccessed": 1775649968945,
+      "accessCount": 17,
+      "lastAccessed": 1775702110298,
+      "type": "file"
+    },
+    {
+      "path": "api/service/ethereum_service.go",
+      "accessCount": 13,
+      "lastAccessed": 1775702110245,
+      "type": "file"
+    },
+    {
+      "path": "main.go",
+      "accessCount": 11,
+      "lastAccessed": 1775702110351,
       "type": "file"
     },
     {
@@ -139,9 +151,9 @@
       "type": "file"
     },
     {
-      "path": "api/service/ethereum_service.go",
+      "path": "api/config/config.go",
       "accessCount": 9,
-      "lastAccessed": 1775650407412,
+      "lastAccessed": 1775702080635,
       "type": "file"
     },
     {
@@ -157,15 +169,15 @@
       "type": "file"
     },
     {
-      "path": "api/middleware_jwt.go",
-      "accessCount": 7,
-      "lastAccessed": 1775521842872,
+      "path": ".env.example",
+      "accessCount": 8,
+      "lastAccessed": 1775702094369,
       "type": "file"
     },
     {
-      "path": "main.go",
+      "path": "api/middleware_jwt.go",
       "accessCount": 7,
-      "lastAccessed": 1775524703248,
+      "lastAccessed": 1775521842872,
       "type": "file"
     },
     {
@@ -175,15 +187,15 @@
       "type": "file"
     },
     {
+      "path": "",
+      "accessCount": 7,
+      "lastAccessed": 1775702513392,
+      "type": "directory"
+    },
+    {
       "path": "CLAUDE.md",
       "accessCount": 6,
       "lastAccessed": 1775524783519,
-      "type": "file"
-    },
-    {
-      "path": "api/config/config.go",
-      "accessCount": 6,
-      "lastAccessed": 1775650391784,
       "type": "file"
     },
     {
@@ -205,21 +217,9 @@
       "type": "file"
     },
     {
-      "path": "",
-      "accessCount": 5,
-      "lastAccessed": 1775649757277,
-      "type": "directory"
-    },
-    {
       "path": "api/controller/auth_controller.go",
       "accessCount": 5,
       "lastAccessed": 1775649906406,
-      "type": "file"
-    },
-    {
-      "path": ".env.example",
-      "accessCount": 5,
-      "lastAccessed": 1775650439824,
       "type": "file"
     },
     {
@@ -236,8 +236,8 @@
     },
     {
       "path": "go.mod",
-      "accessCount": 3,
-      "lastAccessed": 1775524703368,
+      "accessCount": 4,
+      "lastAccessed": 1775702094409,
       "type": "file"
     },
     {
@@ -313,6 +313,12 @@
       "type": "directory"
     },
     {
+      "path": "frontend/package.json",
+      "accessCount": 2,
+      "lastAccessed": 1775702094423,
+      "type": "file"
+    },
+    {
       "path": ".claude/settings.local.json",
       "accessCount": 1,
       "lastAccessed": 1775483420708,
@@ -322,12 +328,6 @@
       "path": "frontend/src/styles/main.css",
       "accessCount": 1,
       "lastAccessed": 1775523133770,
-      "type": "file"
-    },
-    {
-      "path": "frontend/package.json",
-      "accessCount": 1,
-      "lastAccessed": 1775524714292,
       "type": "file"
     }
   ],
