@@ -23,6 +23,8 @@ const rpcTimeout = 10 * time.Second
 type EthereumService interface {
 	// CheckERC20Balance 查询指定链上 ERC-20 余额是否 > 0
 	CheckERC20Balance(chainID, walletAddress, contractAddress string) (bool, error)
+	// CheckERC721Ownership 查询指定链上 ERC-721 NFT 持有情况，返回是否持有及 tokenId 列表
+	CheckERC721Ownership(chainID, walletAddress, contractAddress string) (bool, []*big.Int, error)
 	// GetChains 返回支持的链列表
 	GetChains() []config.ChainConfig
 	// Close 关闭所有连接
@@ -35,8 +37,8 @@ type chainClient struct {
 	config config.ChainConfig
 }
 
-// ethereumServiceImpl 多链查询服务实现
-type ethereumServiceImpl struct {
+// EthereumServiceImpl 多链查询服务实现
+type EthereumServiceImpl struct {
 	mu      sync.RWMutex
 	clients map[string]*chainClient // key: chain ID
 	chains  []config.ChainConfig
@@ -44,7 +46,7 @@ type ethereumServiceImpl struct {
 
 // NewEthereumService 创建多链查询服务
 func NewEthereumService(chains []config.ChainConfig, proxyAddr string) (EthereumService, error) {
-	svc := &ethereumServiceImpl{
+	svc := &EthereumServiceImpl{
 		clients: make(map[string]*chainClient, len(chains)),
 		chains:  chains,
 	}
@@ -86,7 +88,7 @@ func dialChain(rpcURL, proxyAddr string) (*ethclient.Client, error) {
 }
 
 // CheckERC20Balance 查询指定链上 ERC-20 余额是否 > 0
-func (s *ethereumServiceImpl) CheckERC20Balance(chainID, walletAddress, contractAddress string) (bool, error) {
+func (s *EthereumServiceImpl) CheckERC20Balance(chainID, walletAddress, contractAddress string) (bool, error) {
 	s.mu.RLock()
 	cc, ok := s.clients[chainID]
 	s.mu.RUnlock()
@@ -120,12 +122,71 @@ func (s *ethereumServiceImpl) CheckERC20Balance(chainID, walletAddress, contract
 }
 
 // GetChains 返回支持的链列表
-func (s *ethereumServiceImpl) GetChains() []config.ChainConfig {
+func (s *EthereumServiceImpl) GetChains() []config.ChainConfig {
 	return s.chains
 }
 
+// CheckERC721Ownership 查询指定链上 ERC-721 NFT 持有情况
+func (s *EthereumServiceImpl) CheckERC721Ownership(chainID, walletAddress, contractAddress string) (bool, []*big.Int, error) {
+	s.mu.RLock()
+	cc, ok := s.clients[chainID]
+	s.mu.RUnlock()
+	if !ok {
+		return false, nil, fmt.Errorf("unsupported chain: %s", chainID)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), rpcTimeout)
+	defer cancel()
+
+	wallet := common.HexToAddress(walletAddress)
+	contract := common.HexToAddress(contractAddress)
+
+	// ERC-721 balanceOf(address) selector: 0x70a08231
+	selector := []byte{0x70, 0xa0, 0x82, 0x31}
+	paddedAddress := common.LeftPadBytes(wallet.Bytes(), 32)
+	data := append(selector, paddedAddress...)
+
+	result, err := cc.client.CallContract(ctx, ethereum.CallMsg{To: &contract, Data: data}, nil)
+	if err != nil {
+		return false, nil, fmt.Errorf("ERC-721 balanceOf query failed: %w", err)
+	}
+
+	balance := new(big.Int).SetBytes(result)
+	if balance.Sign() == 0 {
+		return false, nil, nil
+	}
+
+	// 安全检查：balanceOf 返回值过大说明可能不是 ERC-721 合约（如 ERC-20 余额）
+	maxEnumerate := big.NewInt(1000)
+	if balance.Cmp(maxEnumerate) > 0 {
+		return true, nil, nil
+	}
+
+	// tokenOfOwnerByIndex(address, uint256) selector: 0x2f745c59
+	count := int(balance.Int64())
+	tokenIDs := make([]*big.Int, 0, count)
+	indexSelector := []byte{0x2f, 0x74, 0x5c, 0x59}
+
+	for i := 0; i < count; i++ {
+		idx := common.LeftPadBytes(big.NewInt(int64(i)).Bytes(), 32)
+		callData := append(indexSelector, paddedAddress...)
+		callData = append(callData, idx...)
+
+		tokenResult, err := cc.client.CallContract(ctx, ethereum.CallMsg{To: &contract, Data: callData}, nil)
+		if err != nil {
+			// 合约不支持 ERC721Enumerable（tokenOfOwnerByIndex revert），返回持有状态但不列出 tokenId
+			return true, nil, nil
+		}
+
+		tokenID := new(big.Int).SetBytes(tokenResult)
+		tokenIDs = append(tokenIDs, tokenID)
+	}
+
+	return true, tokenIDs, nil
+}
+
 // Close 关闭所有连接
-func (s *ethereumServiceImpl) Close() {
+func (s *EthereumServiceImpl) Close() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for _, cc := range s.clients {

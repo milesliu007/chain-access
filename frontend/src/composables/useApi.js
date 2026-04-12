@@ -40,10 +40,18 @@ export function useApi() {
   }
 
   async function checkAccess(address, contractAddress, token, chainId = 'ethereum') {
-    const res = await fetch(
-      `${API_BASE}/check-access?address=${encodeURIComponent(address)}&contract_address=${encodeURIComponent(contractAddress)}&chain_id=${encodeURIComponent(chainId)}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
+    const res = await fetch(`${API_BASE}/check-access`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        chain_id: chainId,
+        address,
+        contract_address: contractAddress,
+      }),
+    })
     if (!res.ok) {
       const err = await res.json()
       throw new Error(err.error || '查询失败')
@@ -52,5 +60,25 @@ export function useApi() {
     return data.has_access
   }
 
-  return { requestChallenge, verifySignature, checkAccess, getChains }
+  async function checkNFT(address, contractAddress, token, chainId = 'ethereum') {
+    const res = await fetch(`${API_BASE}/check-nft`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        chain_id: chainId,
+        address,
+        contract_address: contractAddress,
+      }),
+    })
+    if (!res.ok) {
+      const err = await res.json()
+      throw new Error(err.error || 'NFT query failed')
+    }
+    return await res.json()
+  }
+
+  return { requestChallenge, verifySignature, checkAccess, checkNFT, getChains }
 }

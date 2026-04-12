@@ -1,8 +1,28 @@
 package model
 
+// CheckAccessRequest ERC-20 权限查询请求
+type CheckAccessRequest struct {
+	ChainID         string `json:"chain_id" binding:"required"`
+	Address         string `json:"address"`
+	ContractAddress string `json:"contract_address" binding:"required"`
+}
+
 // CheckAccessResponse 权限查询响应
 type CheckAccessResponse struct {
 	HasAccess bool `json:"has_access"`
+}
+
+// CheckNFTRequest NFT 查询请求
+type CheckNFTRequest struct {
+	ChainID         string `json:"chain_id" binding:"required"`
+	Address         string `json:"address"`
+	ContractAddress string `json:"contract_address" binding:"required"`
+}
+
+// CheckNFTResponse NFT 查询响应
+type CheckNFTResponse struct {
+	HasNFT   bool     `json:"has_nft"`
+	TokenIDs []string `json:"token_ids"`
 }
 
 // ChainInfo 链信息（返回给前端）

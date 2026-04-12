@@ -7,6 +7,7 @@ export default defineConfig({
     proxy: {
       '/auth': 'http://localhost:8080',
       '/check-access': 'http://localhost:8080',
+      '/check-nft': 'http://localhost:8080',
       '/chains': 'http://localhost:8080',
       '/health': 'http://localhost:8080',
     },

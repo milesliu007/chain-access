@@ -46,7 +46,8 @@ func SetupRouter(
 	protectedGroup := r.Group("/")
 	protectedGroup.Use(middleware.JWTMiddleware(authService))
 	{
-		protectedGroup.GET("/check-access", accessCtrl.HandleCheckAccess)
+		protectedGroup.POST("/check-access", accessCtrl.HandleCheckAccess)
+		protectedGroup.POST("/check-nft", accessCtrl.HandleCheckNFT)
 	}
 
 	// 前端静态文件

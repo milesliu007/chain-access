@@ -23,37 +23,33 @@ func NewAccessController(ethService service.EthereumService) *AccessController {
 
 // HandleCheckAccess 处理权限查询请求
 func (ctrl *AccessController) HandleCheckAccess(c *gin.Context) {
-	// 从 JWT context 获取认证地址，防止越权查询
-	jwtAddress := c.GetString("address")
-	queryAddress := c.Query("address")
-	contractAddress := c.Query("contract_address")
-	chainID := c.DefaultQuery("chain_id", "ethereum")
-
-	if contractAddress == "" {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "missing required parameter: contract_address"})
+	var req model.CheckAccessRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "invalid request body"})
 		return
 	}
 
-	// 如果提供了 query address，必须与 JWT 地址一致
+	jwtAddress := c.GetString("address")
+
 	address := jwtAddress
-	if queryAddress != "" {
-		if !service.IsValidAddress(queryAddress) {
+	if req.Address != "" {
+		if !service.IsValidAddress(req.Address) {
 			c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "invalid wallet address format"})
 			return
 		}
-		if strings.ToLower(queryAddress) != strings.ToLower(jwtAddress) {
+		if strings.ToLower(req.Address) != strings.ToLower(jwtAddress) {
 			c.JSON(http.StatusForbidden, model.ErrorResponse{Error: "not authorized to query other addresses"})
 			return
 		}
-		address = queryAddress
+		address = req.Address
 	}
 
-	if !service.IsValidAddress(contractAddress) {
+	if !service.IsValidAddress(req.ContractAddress) {
 		c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "invalid contract address format"})
 		return
 	}
 
-	hasAccess, err := ctrl.ethService.CheckERC20Balance(chainID, address, contractAddress)
+	hasAccess, err := ctrl.ethService.CheckERC20Balance(req.ChainID, address, req.ContractAddress)
 	if err != nil {
 		log.Printf("链上查询失败: %v", err)
 		c.JSON(http.StatusInternalServerError, model.ErrorResponse{Error: "on-chain query failed"})
@@ -61,4 +57,47 @@ func (ctrl *AccessController) HandleCheckAccess(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, model.CheckAccessResponse{HasAccess: hasAccess})
+}
+
+// HandleCheckNFT 处理 ERC-721 NFT 查询请求
+func (ctrl *AccessController) HandleCheckNFT(c *gin.Context) {
+	var req model.CheckNFTRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "invalid request body"})
+		return
+	}
+
+	jwtAddress := c.GetString("address")
+
+	address := jwtAddress
+	if req.Address != "" {
+		if !service.IsValidAddress(req.Address) {
+			c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "invalid wallet address format"})
+			return
+		}
+		if strings.ToLower(req.Address) != strings.ToLower(jwtAddress) {
+			c.JSON(http.StatusForbidden, model.ErrorResponse{Error: "not authorized to query other addresses"})
+			return
+		}
+		address = req.Address
+	}
+
+	if !service.IsValidAddress(req.ContractAddress) {
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "invalid contract address format"})
+		return
+	}
+
+	hasNFT, tokenIDs, err := ctrl.ethService.CheckERC721Ownership(req.ChainID, address, req.ContractAddress)
+	if err != nil {
+		log.Printf("ERC-721 query failed: %v", err)
+		c.JSON(http.StatusInternalServerError, model.ErrorResponse{Error: "on-chain query failed"})
+		return
+	}
+
+	ids := make([]string, 0, len(tokenIDs))
+	for _, id := range tokenIDs {
+		ids = append(ids, id.String())
+	}
+
+	c.JSON(http.StatusOK, model.CheckNFTResponse{HasNFT: hasNFT, TokenIDs: ids})
 }

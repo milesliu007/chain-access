@@ -13,14 +13,31 @@
       <p class="subtitle">Web3 Token-Gated Access Verification</p>
     </header>
     <WalletConnect />
-    <AccessCheck />
+    <div class="tab-bar">
+      <button
+        class="tab-btn"
+        :class="{ active: activeTab === 'erc20' }"
+        @click="activeTab = 'erc20'"
+      >ERC-20</button>
+      <button
+        class="tab-btn"
+        :class="{ active: activeTab === 'nft' }"
+        @click="activeTab = 'nft'"
+      >NFT (ERC-721)</button>
+    </div>
+    <AccessCheck v-if="activeTab === 'erc20'" />
+    <NFTCheck v-if="activeTab === 'nft'" />
     <footer class="app-footer">
-      Powered by Multi-Chain EVM &middot; ERC-20 Token Gating
+      Powered by Multi-Chain EVM &middot; ERC-20 &amp; ERC-721 Token Gating
     </footer>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import WalletConnect from './components/WalletConnect.vue'
 import AccessCheck from './components/AccessCheck.vue'
+import NFTCheck from './components/NFTCheck.vue'
+
+const activeTab = ref('erc20')
 </script>
