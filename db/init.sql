@@ -1,0 +1,24 @@
+-- 后台管理系统数据库初始化
+CREATE
+DATABASE IF NOT EXISTS chain_access CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+USE chain_access;
+
+
+CREATE TABLE IF NOT EXISTS `user_balances`
+(
+    `id`         BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `chain`      VARCHAR(50)  NOT NULL,
+    `address`    VARCHAR(255) NOT NULL,
+    `token`      VARCHAR(255) NOT NULL,
+    `balance`    VARCHAR(100) NOT NULL,
+    `updated_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX        `idx_address` (`address`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- 示例数据
+INSERT INTO user_balances (address, chain, token, balance)
+VALUES ('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', 'eth', '0xdAC17F958D2ee523a2206206994597C13D831ec7', '1000000000'),
+       ('0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B', 'eth', '0xdAC17F958D2ee523a2206206994597C13D831ec7', '500000000'),
+       ('0x742d35Cc6634C0532925a3b844Bc454e4438f44e', 'bsc', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', '250000000');

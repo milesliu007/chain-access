@@ -28,8 +28,21 @@ func main() {
 	}
 	defer ethService.Close()
 
+	// 初始化 MySQL 余额仓库（可选）
+	var adminService service.AdminService
+	if cfg.MySQLDSN != "" {
+		balanceRepo, err := repository.NewBalanceRepository(cfg.MySQLDSN)
+		if err != nil {
+			log.Fatalf("MySQL 连接失败: %v", err)
+		}
+		adminService = service.NewAdminService(authService, ethService, balanceRepo)
+	} else {
+		log.Println("MYSQL_DSN not set, admin features disabled")
+		adminService = service.NewNoopAdminService()
+	}
+
 	// 创建路由并启动
-	r := router.SetupRouter(cfg.AllowedOrigins, authService, ethService)
+	r := router.SetupRouter(cfg.AllowedOrigins, authService, ethService, adminService)
 
 	log.Printf("服务启动在端口 %s", cfg.Port)
 	if err := r.Run(":" + cfg.Port); err != nil {

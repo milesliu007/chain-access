@@ -8,11 +8,14 @@ import (
 
 // Config 应用配置
 type Config struct {
-	Chains         []ChainConfig
-	JWTSecret      []byte
-	Port           string
-	AllowedOrigins []string
-	HTTPProxy      string
+	Chains           []ChainConfig
+	JWTSecret        []byte
+	Port             string
+	AllowedOrigins   []string
+	HTTPProxy        string
+	MySQLDSN         string
+	AdminNFTContract string
+	AdminNFTChainID  string
 }
 
 // LoadConfig 从环境变量加载配置，缺少必要配置时拒绝启动
@@ -47,10 +50,13 @@ func LoadConfig() (*Config, error) {
 	}
 
 	return &Config{
-		Chains:         DefaultChains(infuraKey),
-		JWTSecret:      []byte(jwtSecret),
-		Port:           port,
-		AllowedOrigins: origins,
-		HTTPProxy:      os.Getenv("HTTP_PROXY"),
+		Chains:           DefaultChains(infuraKey),
+		JWTSecret:        []byte(jwtSecret),
+		Port:             port,
+		AllowedOrigins:   origins,
+		HTTPProxy:        os.Getenv("HTTP_PROXY"),
+		MySQLDSN:         os.Getenv("MYSQL_DSN"),
+		AdminNFTContract: os.Getenv("ADMIN_NFT_CONTRACT"),
+		AdminNFTChainID:  os.Getenv("ADMIN_NFT_CHAIN_ID"),
 	}, nil
 }

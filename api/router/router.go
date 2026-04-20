@@ -16,6 +16,7 @@ func SetupRouter(
 	allowedOrigins []string,
 	authService service.AuthService,
 	ethService service.EthereumService,
+	adminService service.AdminService,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -31,6 +32,7 @@ func SetupRouter(
 	authCtrl := controller.NewAuthController(authService)
 	accessCtrl := controller.NewAccessController(ethService)
 	chainCtrl := controller.NewChainController(ethService)
+	adminCtrl := controller.NewAdminController(adminService, authService)
 
 	// 认证路由（无需 JWT）
 	authGroup := r.Group("/auth")
@@ -51,8 +53,22 @@ func SetupRouter(
 		protectedGroup.POST("/check-nft1155", accessCtrl.HandleCheckNFT1155)
 	}
 
+	// 后台管理路由
+	adminGroup := r.Group("/admin")
+	{
+		// 登录不需要 JWT
+		adminGroup.POST("/login", adminCtrl.HandleAdminLogin)
+		// 受保护的管理接口
+		adminProtected := adminGroup.Group("/")
+		adminProtected.Use(middleware.AdminJWTMiddleware(authService))
+		{
+			adminProtected.GET("/balances", adminCtrl.HandleListBalances)
+		}
+	}
+
 	// 前端静态文件
 	r.StaticFile("/", "./frontend/dist/index.html")
+	r.StaticFile("/admin-panel", "./frontend/dist/index-admin.html")
 	r.Static("/assets", "./frontend/dist/assets")
 	r.NoRoute(func(c *gin.Context) {
 		c.File("./frontend/dist/index.html")
