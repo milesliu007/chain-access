@@ -25,6 +25,8 @@ type EthereumService interface {
 	CheckERC20Balance(chainID, walletAddress, contractAddress string) (bool, error)
 	// CheckERC721Ownership 查询指定链上 ERC-721 NFT 持有情况，返回是否持有及 tokenId 列表
 	CheckERC721Ownership(chainID, walletAddress, contractAddress string) (bool, []*big.Int, error)
+	// CheckERC1155Balance 查询指定链上 ERC-1155 代币持有数量
+	CheckERC1155Balance(chainID, walletAddress, contractAddress, tokenID string) (bool, *big.Int, error)
 	// GetChains 返回支持的链列表
 	GetChains() []config.ChainConfig
 	// Close 关闭所有连接
@@ -183,6 +185,42 @@ func (s *EthereumServiceImpl) CheckERC721Ownership(chainID, walletAddress, contr
 	}
 
 	return true, tokenIDs, nil
+}
+
+// CheckERC1155Balance 查询指定链上 ERC-1155 代币持有数量
+func (s *EthereumServiceImpl) CheckERC1155Balance(chainID, walletAddress, contractAddress, tokenID string) (bool, *big.Int, error) {
+	s.mu.RLock()
+	cc, ok := s.clients[chainID]
+	s.mu.RUnlock()
+	if !ok {
+		return false, nil, fmt.Errorf("unsupported chain: %s", chainID)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), rpcTimeout)
+	defer cancel()
+
+	wallet := common.HexToAddress(walletAddress)
+	contract := common.HexToAddress(contractAddress)
+
+	tid, ok := new(big.Int).SetString(tokenID, 10)
+	if !ok {
+		return false, nil, fmt.Errorf("invalid token ID: %s", tokenID)
+	}
+
+	// balanceOf(address,uint256) selector: 0x00fdd58e
+	selector := []byte{0x00, 0xfd, 0xd5, 0x8e}
+	paddedAddress := common.LeftPadBytes(wallet.Bytes(), 32)
+	paddedTokenID := common.LeftPadBytes(tid.Bytes(), 32)
+	data := append(selector, paddedAddress...)
+	data = append(data, paddedTokenID...)
+
+	result, err := cc.client.CallContract(ctx, ethereum.CallMsg{To: &contract, Data: data}, nil)
+	if err != nil {
+		return false, nil, fmt.Errorf("on-chain query failed: %w", err)
+	}
+
+	balance := new(big.Int).SetBytes(result)
+	return balance.Sign() > 0, balance, nil
 }
 
 // Close 关闭所有连接

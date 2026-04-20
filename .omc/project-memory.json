@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1775877483900,
+  "lastScanned": 1775989889396,
   "projectRoot": "/Users/milesliu/go/src/chain-access",
   "techStack": {
     "languages": [
@@ -45,14 +45,14 @@
       "path": "api",
       "purpose": "API routes",
       "fileCount": 0,
-      "lastAccessed": 1775877483883,
+      "lastAccessed": 1775989889378,
       "keyFiles": []
     },
     "frontend": {
       "path": "frontend",
       "purpose": null,
       "fileCount": 7,
-      "lastAccessed": 1775877483883,
+      "lastAccessed": 1775989889378,
       "keyFiles": [
         "CLAUDE.md",
         "README.md",
@@ -65,7 +65,7 @@
       "path": "state",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1775877483883,
+      "lastAccessed": 1775989889379,
       "keyFiles": [
         "cancel-signal-state.json"
       ]
@@ -74,7 +74,7 @@
       "path": "api/config",
       "purpose": "Configuration files",
       "fileCount": 2,
-      "lastAccessed": 1775877483884,
+      "lastAccessed": 1775989889380,
       "keyFiles": [
         "chain.go",
         "config.go"
@@ -84,16 +84,23 @@
       "path": "api/middleware",
       "purpose": "Middleware",
       "fileCount": 1,
-      "lastAccessed": 1775877483884,
+      "lastAccessed": 1775989889380,
       "keyFiles": [
         "jwt.go"
       ]
+    },
+    "api/test": {
+      "path": "api/test",
+      "purpose": "Test files",
+      "fileCount": 0,
+      "lastAccessed": 1775989889380,
+      "keyFiles": []
     },
     "frontend/dist": {
       "path": "frontend/dist",
       "purpose": "Distribution/build output",
       "fileCount": 3,
-      "lastAccessed": 1775877483884,
+      "lastAccessed": 1775989889381,
       "keyFiles": [
         "favicon.svg",
         "icons.svg",
@@ -104,11 +111,17 @@
       "path": "frontend/node_modules",
       "purpose": "Dependencies",
       "fileCount": 1,
-      "lastAccessed": 1775877483884,
+      "lastAccessed": 1775989889382,
       "keyFiles": []
     }
   },
   "hotPaths": [
+    {
+      "path": "api/service/ethereum_service.go",
+      "accessCount": 24,
+      "lastAccessed": 1775990382622,
+      "type": "file"
+    },
     {
       "path": "api/service/auth_service.go",
       "accessCount": 22,
@@ -116,15 +129,9 @@
       "type": "file"
     },
     {
-      "path": "api/service/ethereum_service.go",
-      "accessCount": 19,
-      "lastAccessed": 1775877915853,
-      "type": "file"
-    },
-    {
       "path": "api/controller/access_controller.go",
-      "accessCount": 19,
-      "lastAccessed": 1775879121254,
+      "accessCount": 21,
+      "lastAccessed": 1775990186432,
       "type": "file"
     },
     {
@@ -141,8 +148,20 @@
     },
     {
       "path": "api/router/router.go",
+      "accessCount": 13,
+      "lastAccessed": 1775990201590,
+      "type": "file"
+    },
+    {
+      "path": "api/model/access.go",
       "accessCount": 11,
-      "lastAccessed": 1775879130064,
+      "lastAccessed": 1775990172192,
+      "type": "file"
+    },
+    {
+      "path": "CLAUDE.md",
+      "accessCount": 11,
+      "lastAccessed": 1775990406614,
       "type": "file"
     },
     {
@@ -164,15 +183,27 @@
       "type": "file"
     },
     {
+      "path": "frontend/src/composables/useApi.js",
+      "accessCount": 10,
+      "lastAccessed": 1775990260903,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/App.vue",
+      "accessCount": 10,
+      "lastAccessed": 1775990313043,
+      "type": "file"
+    },
+    {
       "path": "api/config.go",
       "accessCount": 9,
       "lastAccessed": 1775521842921,
       "type": "file"
     },
     {
-      "path": "api/model/access.go",
+      "path": "frontend/vite.config.js",
       "accessCount": 9,
-      "lastAccessed": 1775879103700,
+      "lastAccessed": 1775990273204,
       "type": "file"
     },
     {
@@ -194,12 +225,6 @@
       "type": "directory"
     },
     {
-      "path": "frontend/src/composables/useApi.js",
-      "accessCount": 8,
-      "lastAccessed": 1775879135333,
-      "type": "file"
-    },
-    {
       "path": "api/middleware_jwt.go",
       "accessCount": 7,
       "lastAccessed": 1775521842872,
@@ -209,24 +234,6 @@
       "path": "api/middleware/jwt.go",
       "accessCount": 7,
       "lastAccessed": 1775649842219,
-      "type": "file"
-    },
-    {
-      "path": "frontend/src/App.vue",
-      "accessCount": 7,
-      "lastAccessed": 1775878713489,
-      "type": "file"
-    },
-    {
-      "path": "frontend/vite.config.js",
-      "accessCount": 7,
-      "lastAccessed": 1775878725404,
-      "type": "file"
-    },
-    {
-      "path": "CLAUDE.md",
-      "accessCount": 6,
-      "lastAccessed": 1775524783519,
       "type": "file"
     },
     {
@@ -360,6 +367,12 @@
       "accessCount": 1,
       "lastAccessed": 1775877635746,
       "type": "directory"
+    },
+    {
+      "path": "frontend/src/components/NFT1155Check.vue",
+      "accessCount": 1,
+      "lastAccessed": 1775990289643,
+      "type": "file"
     }
   ],
   "userDirectives": []

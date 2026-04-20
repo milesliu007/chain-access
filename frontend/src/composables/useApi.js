@@ -80,5 +80,26 @@ export function useApi() {
     return await res.json()
   }
 
-  return { requestChallenge, verifySignature, checkAccess, checkNFT, getChains }
+  async function checkNFT1155(address, contractAddress, tokenId, token, chainId = 'ethereum') {
+    const res = await fetch(`${API_BASE}/check-nft1155`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        chain_id: chainId,
+        address,
+        contract_address: contractAddress,
+        token_id: tokenId,
+      }),
+    })
+    if (!res.ok) {
+      const err = await res.json()
+      throw new Error(err.error || 'NFT1155 query failed')
+    }
+    return await res.json()
+  }
+
+  return { requestChallenge, verifySignature, checkAccess, checkNFT, checkNFT1155, getChains }
 }

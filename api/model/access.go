@@ -25,6 +25,20 @@ type CheckNFTResponse struct {
 	TokenIDs []string `json:"token_ids"`
 }
 
+// CheckNFT1155Request ERC-1155 查询请求
+type CheckNFT1155Request struct {
+	ChainID         string `json:"chain_id" binding:"required"`
+	Address         string `json:"address"`
+	ContractAddress string `json:"contract_address" binding:"required"`
+	TokenID         string `json:"token_id" binding:"required"`
+}
+
+// CheckNFT1155Response ERC-1155 查询响应
+type CheckNFT1155Response struct {
+	HasNFT  bool   `json:"has_nft"`
+	Balance string `json:"balance"`
+}
+
 // ChainInfo 链信息（返回给前端）
 type ChainInfo struct {
 	ID      string `json:"id"`

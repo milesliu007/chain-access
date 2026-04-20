@@ -24,9 +24,15 @@
         :class="{ active: activeTab === 'nft' }"
         @click="activeTab = 'nft'"
       >NFT (ERC-721)</button>
+      <button
+        class="tab-btn"
+        :class="{ active: activeTab === 'nft1155' }"
+        @click="activeTab = 'nft1155'"
+      >ERC-1155</button>
     </div>
     <AccessCheck v-if="activeTab === 'erc20'" />
     <NFTCheck v-if="activeTab === 'nft'" />
+    <NFT1155Check v-if="activeTab === 'nft1155'" />
     <footer class="app-footer">
       Powered by Multi-Chain EVM &middot; ERC-20 &amp; ERC-721 Token Gating
     </footer>
@@ -38,6 +44,7 @@ import { ref } from 'vue'
 import WalletConnect from './components/WalletConnect.vue'
 import AccessCheck from './components/AccessCheck.vue'
 import NFTCheck from './components/NFTCheck.vue'
+import NFT1155Check from './components/NFT1155Check.vue'
 
 const activeTab = ref('erc20')
 </script>

@@ -101,3 +101,46 @@ func (ctrl *AccessController) HandleCheckNFT(c *gin.Context) {
 
 	c.JSON(http.StatusOK, model.CheckNFTResponse{HasNFT: hasNFT, TokenIDs: ids})
 }
+
+// HandleCheckNFT1155 处理 ERC-1155 NFT 查询请求
+func (ctrl *AccessController) HandleCheckNFT1155(c *gin.Context) {
+	var req model.CheckNFT1155Request
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "invalid request body"})
+		return
+	}
+
+	jwtAddress := c.GetString("address")
+
+	address := jwtAddress
+	if req.Address != "" {
+		if !service.IsValidAddress(req.Address) {
+			c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "invalid wallet address format"})
+			return
+		}
+		if strings.ToLower(req.Address) != strings.ToLower(jwtAddress) {
+			c.JSON(http.StatusForbidden, model.ErrorResponse{Error: "not authorized to query other addresses"})
+			return
+		}
+		address = req.Address
+	}
+
+	if !service.IsValidAddress(req.ContractAddress) {
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "invalid contract address format"})
+		return
+	}
+
+	hasNFT, balance, err := ctrl.ethService.CheckERC1155Balance(req.ChainID, address, req.ContractAddress, req.TokenID)
+	if err != nil {
+		log.Printf("ERC-1155 query failed: %v", err)
+		c.JSON(http.StatusInternalServerError, model.ErrorResponse{Error: "on-chain query failed"})
+		return
+	}
+
+	balanceStr := "0"
+	if balance != nil {
+		balanceStr = balance.String()
+	}
+
+	c.JSON(http.StatusOK, model.CheckNFT1155Response{HasNFT: hasNFT, Balance: balanceStr})
+}

@@ -48,6 +48,7 @@ func SetupRouter(
 	{
 		protectedGroup.POST("/check-access", accessCtrl.HandleCheckAccess)
 		protectedGroup.POST("/check-nft", accessCtrl.HandleCheckNFT)
+		protectedGroup.POST("/check-nft1155", accessCtrl.HandleCheckNFT1155)
 	}
 
 	// 前端静态文件

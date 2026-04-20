@@ -79,7 +79,7 @@ Web3 代币门控应用：用户通过以太坊钱包签名登录，后端验证
 ### 核心服务
 
 - **AuthService** — 挑战-签名认证流程：生成 UUID 挑战（5 分钟 TTL）→ 验证 EIP-191 签名 → 签发 24 小时 JWT
-- **EthereumService** — 通过 Infura RPC 调用 ERC-20 `balanceOf()`，判断地址是否持有代币
+- **EthereumService** — 多链支持，通过 Infura RPC 查询 ERC-20 `balanceOf()` 和 ERC-721 `balanceOf()`；链注册表在 `api/config/chain.go` 的 `DefaultChains()` 中维护，新增链只需追加配置
 
 ### API 端点
 
@@ -87,7 +87,10 @@ Web3 代币门控应用：用户通过以太坊钱包签名登录，后端验证
 |---|---|---|---|
 | POST | `/auth/challenge` | 无 | 获取签名挑战 |
 | POST | `/auth/verify` | 无 | 提交签名，获取 JWT |
-| GET | `/check-access` | JWT | 检查代币持有状态 |
+| GET | `/chains` | 无 | 获取支持的链列表 |
+| POST | `/check-access` | JWT | 检查 ERC-20 代币持有状态 |
+| POST | `/check-nft` | JWT | 检查 ERC-721 NFT 持有状态 |
+| POST | `/check-nft1155` | JWT | 检查 ERC-1155 NFT 持有数量 |
 
 ### 前端（`frontend/` 目录）
 
